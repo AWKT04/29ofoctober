@@ -1,0 +1,325 @@
+:root {
+  --color-mud: #493625;
+  --color-mud-dark: #392B1E;
+  --color-red: #640000;
+  --color-blue: #233A63;
+  --color-cream: #F4EEE2;
+  --color-text: #373737;
+  
+  --font-title: 'DM Serif Display', serif;
+  --font-sub: 'Tiro Devanagari Sanskrit', serif;
+  --font-body: 'Source Serif 4', serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  line-height: 1.6;
+  background: 
+        url('media/A1.png') 
+        no-repeat center center / cover;
+    background-attachment: fixed;   /* opcional: para que no se mueva al hacer scroll (efecto parallax) */
+    min-height: 100vh;
+    margin: 0;
+    /* si quieres que el color crema solo se vea donde no llega la imagen */
+    background-color: #F4EEE2;
+}
+
+/* --- CAPA DE BARRO (MUD OVERLAY) --- */
+/* Esta capa simula el barro en los bordes y se anima con JS */
+.mud-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  background: 
+      radial-gradient(circle at 0% 0%, var(--color-mud) 0%, transparent 15%),
+      radial-gradient(circle at 100% 0%, var(--color-mud) 0%, transparent 10%),
+      radial-gradient(circle at 0% 100%, var(--color-mud) 0%, transparent 20%),
+      radial-gradient(circle at 100% 100%, var(--color-mud) 0%, transparent 15%);
+  opacity: 0.8;
+  transition: transform 0.1s ease-out, opacity 1.5s ease;
+  mix-blend-mode: multiply;
+}
+
+/* --- TIPOGRAFÍA --- */
+h1, h2, h3 {
+  font-family: var(--font-title);
+  line-height: 1.1;
+}
+
+h1 { font-size: 4rem; text-transform: uppercase; color: var(--color-red); }
+h2 { font-size: 3rem; 
+  margin-bottom: 1rem; 
+  color: var(--color-mud-dark);
+  font-size: 4.2rem;          /* ← sube de 3.2rem a algo más grande, prueba entre 3.8rem y 5rem */
+    color: var(--mud-dark);
+    margin-bottom: 1.5rem;      /* un poco más de espacio abajo si lo haces más grande */
+    line-height: 1.05;          /* mantiene legible */
+}
+h3 { font-size: 2rem; color: var(--color-red); }
+
+.subtitle {
+  font-family: var(--sub-font);
+    font-size: clamp(1.4rem, 4vw, 2rem);      /* antes 1.25rem → ahora más grande y elegante */
+    font-style: italic;
+    color: var(--mud);
+    margin: 0 0 2rem;                          /* más espacio abajo para respirar */
+    letter-spacing: 0.02em;                    /* un toque sutil de separación de letras */
+    line-height: 1.3;
+}
+
+p {
+  font-size: clamp(1.25rem, 4vw, 1.65rem);   /* antes era 1.125rem → ahora más grande */
+  line-height: 1.75;                         /* más espacio entre líneas para mejor lectura */
+  margin-bottom: 1.8rem;                     /* más separación entre párrafos */
+  max-width: 65ch;
+}
+
+/* --- LAYOUT & SECCIONES --- */
+section {
+  padding: 4rem 1.5rem;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.container {
+  max-width: 2000px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* --- HERO SECTION --- */
+.hero {
+  height: 100vh;
+  text-align: center;
+  background: url('media/A1.png') no-repeat center center/cover;
+  position: relative;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(244, 238, 226, 0.7); /* Cream overlay */
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding-top: 30vh;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 10vw, 8rem);
+  text-shadow: 2px 2px 0px var(--color-cream);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+  font-family: var(--font-sub);
+  color: var(--color-red);
+}
+
+/* --- TIMELINE SECTIONS --- */
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .grid-layout {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+  }
+}
+
+.text-block {
+  padding: 2rem;
+  background: rgba(244, 238, 226, 0.9);
+  z-index: 5;
+}
+
+/* Imágenes con efectos */
+.img-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 10px 10px 0px var(--color-mud);
+  transition: transform 0.5s ease;
+  aspect-ratio: 4 / 3;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;                 /* ← clave: ocupa toda la altura del contenedor */
+  object-fit: cover;            /* ← rellena sin deformar, recorta lo que sobra */
+  display: block;
+  filter: sepia(0.3) contrast(1.1);
+  transition: transform 1s ease;
+}
+
+.img-container:hover img {
+  transform: scale(1.05);
+}
+
+/* --- SECCIÓN 18:00 (The Water Arrived) --- */
+#section-1800 {
+  background-color: #E8E0D5;
+}
+
+/* --- SECCIÓN 20:00 (Emergency/Red) --- */
+#section-2000 {
+  background-color: var(--color-mud);
+  color: var(--color-cream);
+}
+
+#section-2000 h2, #section-2000 h3, #section-2000 .subtitle {
+  color: var(--color-cream);
+}
+
+#section-2000 .text-block {
+  background: transparent;
+  border-left: 4px solid var(--color-red);
+}
+
+/* Titulares Pop-up */
+.headlines-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.headline-pop {
+  position: absolute;
+  background: white;
+  color: black;
+  padding: 1rem;
+  font-family: 'Helvetica', sans-serif; /* Contraste periodístico */
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  max-width: 250px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.headline-pop.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --- SECCIÓN VICTIMS (Impact) --- */
+.impact-stat {
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-family: var(--font-title);
+  color: var(--color-red);
+  line-height: 1;
+  text-align: center;
+}
+
+/* --- SECCIÓN SOLIDARIDAD ("Only People") --- */
+#solidarity {
+  background: linear-gradient(to bottom, var(--color-cream), #dcdcdc);
+}
+
+.collage {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.collage img {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  opacity: 0; /* JS handle fade in */
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.collage img.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- SECCIÓN FINAL (Esperanza/Azul) --- */
+#hope {
+  background-color: var(--color-blue);
+  color: white;
+  text-align: center;
+  min-height: 100vh;
+}
+
+#hope h2 { color: white; }
+#hope .subtitle { color: #9AB7C7; }
+
+.clean-animation {
+  width: 100%;
+  height: 70vh;
+  background: url('/media/B6.png') no-repeat center/cover;
+  mask-image: linear-gradient(to bottom, black 100%, transparent 100%);
+  margin-top: 2rem;
+  
+  /* Filtro gris/negro suave */
+  filter: grayscale(70%) brightness(0.75) contrast(1.1);
+}
+
+/* --- ANIMACIONES GENERALES --- */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 1s ease;
+}
+
+.slide-in-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 1s ease;
+}
+
+.slide-in-left.visible, .slide-in-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+  40% {transform: translateX(-50%) translateY(-10px);}
+  60% {transform: translateX(-50%) translateY(-5px);}
+}
